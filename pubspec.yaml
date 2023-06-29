@@ -1,12 +1,10 @@
-name: flutter_app
-description: Ein neue Flutter App
-
-publish_to: 'none'
+name: wiki_app
+description: 1999 wiki app
 
 version: 0.0.1+1
 
 environment:
-  sdk: '>=2.18.4 <3.0.0'
+  sdk: ^3.0.0
 
 dependencies:
   flutter:

@@ -1,23 +1,24 @@
+import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import 'widgets.dart';
 
-class ItemsTab extends StatefulWidget {
-  static const title = 'Items';
-  static const androidIcon = Icon(Icons.dns);
-  static const iosIcon = Icon(CupertinoIcons.bars);
+class ItemsTab extends StatefulWidget{
+  static const title = 'item';
+  static const androidIcon = Icon(Icons.dashboard);
+  static const iosIcon = Icon(CupertinoIcons.app);
 
   const ItemsTab({super.key, this.androidDrawer});
-
   final Widget? androidDrawer;
 
   @override
   State<ItemsTab> createState() => _ItemsTabState();
 }
 
-class _ItemsTabState extends State<ItemsTab> {
+class _ItemsTabState extends State<ItemsTab>{
   static const _itemsLength = 50;
 
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
@@ -26,59 +27,48 @@ class _ItemsTabState extends State<ItemsTab> {
   late List<String> itemNames;
 
   @override
-  void initState() {
+  void initState(){
     _setData();
     super.initState();
   }
 
   void _setData() {
-    colors = getRandomColors(_itemsLength);
-    itemNames = getRandomNames(_itemsLength);
+    //colors = getRandomColors(_itemsLength);
+    //itemNames = getItemNames(_itemsLength);
   }
 
   Future<void> _refreshData() {
     return Future.delayed(
+      // This is just an arbitrary delay that simulates some network activity.
       const Duration(seconds: 2),
-        () => setState(() => _setData()),
+          () => setState(() => _setData()),
     );
   }
 
-  Widget _listBuilder(BuildContext context, int index) {
-    if (index > _itemsLength) return Container();
+  Widget _listBuilder(BuildContext context, int index){
+    return Container();
+  }
 
-    final color = defaultTargetPlatform == TargetPlatform.iOS ? colors[index] : colors[index].shade400;
-
-    return SafeArea(
-      top: false,
-      bottom: false,
-      child: Hero(
-        tag: index,
-        child: HeroAnimatingCard(
-          item: itemNames[index],
-          color: color,
-          heroAnimation: const AlwaysStoppedAnimation(0),
-          onPressed: () => Navigator.of(context).push<void>(
-            MaterialPageRoute(
-                builder: (context) => ItemDetailTab(
-                  id: index,
-                  item: itemNames[index],
-                  color: color,
-                ),
-            ),
-          ),
+  Widget _buildAndroid(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(ItemsTab.title),
+      ),
+      drawer: widget.androidDrawer,
+      body: RefreshIndicator(
+        key: _androidRefreshKey,
+        onRefresh: _refreshData,
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          itemCount: _itemsLength,
+          itemBuilder: _listBuilder,
         ),
       ),
     );
   }
 
-  void _togglePlatform() {}
-
-  Widget _buildAndroid(BuildContext context){
-    return Scaffold();
-  }
-
   Widget _buildIos(BuildContext context){
-    return Scaffold();
+    return CustomScrollView();
   }
 
   @override

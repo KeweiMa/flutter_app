@@ -1,10 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_app/widgets.dart';
+import 'package:flutter/material.dart';
 
+import 'widgets.dart';
 import 'items_tab.dart';
 
-void main() => runApp(Application());
+/**
+ * 主页
+ * @author: kma
+ * @date: 2023/06/29
+ */
+
+void main() => runApp(const Application());
 
 class Application extends StatelessWidget {
   const Application({super.key});
@@ -12,11 +18,8 @@ class Application extends StatelessWidget {
   @override
   Widget build(context) {
     return MaterialApp(
-      title: 'Testing App',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-      ),
+      title: 'Reverse 1999 Wiki',
+      theme: ThemeData(primarySwatch: Colors.deepOrange, useMaterial3: true),
       darkTheme: ThemeData.dark(),
       builder: (context, child) {
         return CupertinoTheme(
@@ -24,98 +27,65 @@ class Application extends StatelessWidget {
           child: Material(child: child),
         );
       },
-      home: const HomePage(),
+      home: const Reverse1999HomePage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class Reverse1999HomePage extends StatefulWidget {
+  const Reverse1999HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-/*
-  Widget build(BuildContext context){
-    var appState = context.watch<AppState>();
-
-    return Scaffold(
-      body: Column(
-        children: [
-          Text('A random idea: '),
-          Text(appState.current.asLowerCase),
-          ElevatedButton(onPressed: (){print('button pressed');}, child: Text('Next')),
-        ],
-      ),
-    );
-  }
-   */
+  State<Reverse1999HomePage> createState() => _Reverse1999HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  // final itemTabKey = GlobalKey();
-
+class _Reverse1999HomePageState extends State<Reverse1999HomePage> {
   Widget _buildAndroidHomePage(BuildContext context) {
     return ItemsTab(
-      //key: itemTabKey,
-        androidDrawer: _AndroidDrawer();
+      key: itemsTabKey,
+      androidDrawer: _AndroidDrawer(),
     );
   }
-
 
   Widget _buildIosHomePage(BuildContext context) {
     return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: ItemsTab.iosIcon,
-            label: ItemsTab.title,
-          ),
-        ],
-      ),
-      tabBuilder: (context, index) {
-        assert(index <= 2 && index >= 0, 'Unexpected tab index: $index');
-        return switch (index) {
-          0 => CupertinoTabView(
-                defaultTitle: ItemsTab.title,
-                builder: (context) => ItemsTab(key: itemsTabKey),
-              ),
-          _ => const SizedBox.shrink(),
-        };
-      },
+        tabBar: CupertinoTabBar(
+          items: const [
+          ],
+        ),
+        tabBuilder: (context, index) {
+          assert(index <= 2 && index >= 0, 'Unexpected tab Index: $index');
+          return switch(index){
+            _ => const SizedBox.shrink(),
+          };
+        }
     );
   }
 
   @override
   Widget build(context) {
-    return PlatformWidget(androidBuilder: _buildAndroidHomePage, iosBuilder: _buildIosHomePage);
+    return PlatformWidget(
+      androidBuilder: _buildAndroidHomePage,
+      iosBuilder: _buildIosHomePage,
+    );
   }
 }
 
 class _AndroidDrawer extends StatelessWidget {
   @override
-  Widget build(context){
+  Widget build(BuildContext context){
     return Drawer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(color: Colors.deepOrange),
             child: Padding(
               padding: const EdgeInsets.only(bottom: 20),
-              child: Icon(
-                Icons.account_circle,
-                color: Colors.orange.shade800,
+              child: Icon(Icons.account_circle, color: Colors.deepOrange.shade800,
                 size: 96,
               ),
             ),
-          ),
-          ListTile(
-            leading: ItemsTab.androidIcon,
-            title: const Text(ItemsTab.title),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
+          )
         ],
       ),
     );
