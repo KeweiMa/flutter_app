@@ -42,7 +42,6 @@ class Reverse1999HomePage extends StatefulWidget {
 class _Reverse1999HomePageState extends State<Reverse1999HomePage> {
   Widget _buildAndroidHomePage(BuildContext context) {
     return ItemsTab(
-      key: itemsTabKey,
       androidDrawer: _AndroidDrawer(),
     );
   }
